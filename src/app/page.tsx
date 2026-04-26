@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import PublicNavbar from '@/components/layout/PublicNavbar';
 import { Search, Star, Shield, Clock, ChevronRight, Heart, Stethoscope, Building2, Calendar } from 'lucide-react';
@@ -9,6 +9,27 @@ export default function LandingPage() {
   const [searchQ, setSearchQ] = useState('');
   const [searchType, setSearchType] = useState<'doctors' | 'centers'>('doctors');
   const router = useRouter();
+
+  useEffect(() => {
+    // Load Nexora Widget
+    const script = document.createElement('script');
+    script.src = 'https://elanka.ai/widget.iife.js';
+    script.async = true;
+    script.onload = () => {
+      if ((window as any).NexoraWidget) {
+        (window as any).NexoraWidget.init('nx_Q8Yd7i-LgCbh8boF-1qvZbRGgBCGDUOp', {
+          apiUrl: 'https://elanka.ai/api'
+        });
+      }
+    };
+    document.body.appendChild(script);
+
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

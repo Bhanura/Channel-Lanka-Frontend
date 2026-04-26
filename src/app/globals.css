@@ -29,7 +29,8 @@
   --radius-xl: 24px;
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
+/* Global Scoped Reset - Prevents overriding 3rd party widgets */
+.cl-app-wrapper, .cl-app-wrapper * { box-sizing: border-box; margin: 0; padding: 0; }
 
 html { scroll-behavior: smooth; }
 
@@ -41,7 +42,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-a { color: inherit; text-decoration: none; }
+.cl-app-wrapper a { color: inherit; text-decoration: none; }
 
 /* ---- Buttons ---- */
 .btn {
