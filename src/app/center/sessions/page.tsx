@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import DashboardShell from '@/components/layout/DashboardShell';
 import api from '@/lib/api';
 import { Calendar, Plus, Users, Clock, Edit3 } from 'lucide-react';
@@ -89,7 +90,7 @@ export default function CenterSessionsPage() {
       <div className="card">
         <div className="table-wrapper">
           <table>
-            <thead><tr><th>Doctor</th><th>Room</th><th>Date</th><th>Time</th><th>Bookings</th><th>Status</th></tr></thead>
+            <thead><tr><th>Doctor</th><th>Room</th><th>Date</th><th>Time</th><th>Bookings</th><th>Status</th><th>Actions</th></tr></thead>
             <tbody>
               {sessions.map(s => (
                 <tr key={s.session_id}>
@@ -105,6 +106,13 @@ export default function CenterSessionsPage() {
                     </div>
                   </td>
                   <td><span className={`badge ${statusColor[s.status] || 'badge-muted'}`}>{s.status}</span></td>
+                  <td>
+                    {['scheduled', 'active'].includes(s.status) && (
+                      <Link href={`/doctor/sessions/${s.session_id}/queue`} className="btn btn-outline btn-sm" style={{ padding: '4px 8px', fontSize: 12 }}>
+                        Queue
+                      </Link>
+                    )}
+                  </td>
                 </tr>
               ))}
               {sessions.length === 0 && <tr><td colSpan={6} style={{ textAlign: 'center', padding: 32, color: 'var(--text-muted)' }}>No sessions yet. Create your first session!</td></tr>}

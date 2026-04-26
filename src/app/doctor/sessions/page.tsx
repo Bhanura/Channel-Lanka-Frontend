@@ -60,13 +60,18 @@ export default function DoctorSessionsPage() {
                 </div>
                 <span className={`badge ${statusColor[s.status] || 'badge-muted'}`}>{s.status}</span>
               </div>
-              {s.status === 'scheduled' && (
-                <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'flex-end' }}>
+              <div style={{ marginTop: 16, paddingTop: 16, borderTop: '1px solid var(--border-light)', display: 'flex', justifyContent: 'flex-end', gap: 12 }}>
+                {['scheduled', 'active'].includes(s.status) && (
+                  <Link href={`/doctor/sessions/${s.session_id}/queue`} className="btn btn-primary" style={{ padding: '6px 12px', fontSize: 13 }}>
+                    Manage Queue
+                  </Link>
+                )}
+                {s.status === 'scheduled' && (
                   <button onClick={() => setCancelingId(s.session_id)} className="btn btn-outline" style={{ color: 'var(--danger)', borderColor: 'var(--danger)', padding: '6px 12px', fontSize: 13 }}>
                     Cancel Session
                   </button>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           ))}
           {sessions.length === 0 && <div style={{ textAlign: 'center', padding: 60, color: 'var(--text-muted)' }}>No sessions found. Register at a channeling center to start receiving sessions.</div>}
