@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import DashboardShell from '@/components/layout/DashboardShell';
 import api from '@/lib/api';
 import { User, Save, AlertCircle, Plus, Trash2 } from 'lucide-react';
+import ChangePasswordForm from '@/components/auth/ChangePasswordForm';
 
 export default function DoctorProfilePage() {
   const [profile, setProfile] = useState<any>({ name: '', email: '', phone: '', specialization: '', license_number: '', nic: '', bio: '' });
@@ -89,6 +90,7 @@ export default function DoctorProfilePage() {
             </div>
           </div>
         )}
+        <ChangePasswordForm />
       </div>
     </DashboardShell>
   );

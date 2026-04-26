@@ -1,15 +1,14 @@
 'use client';
 import { useEffect, useState, Suspense } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import PublicNavbar from '@/components/layout/PublicNavbar';
 import { useAuth } from '@/context/AuthContext';
 import api from '@/lib/api';
 import { Calendar, Clock, Users, CreditCard, CheckCircle, AlertCircle } from 'lucide-react';
 
-interface BookingPageProps { params: { sessionId: string }; }
-
-export default function BookingPage({ params }: BookingPageProps) {
-  const { sessionId } = params;
+export default function BookingPage() {
+  const params = useParams() as { sessionId: string };
+  const sessionId = params?.sessionId;
   const { user } = useAuth();
   const router = useRouter();
 
@@ -24,6 +23,7 @@ export default function BookingPage({ params }: BookingPageProps) {
   const [error, setError] = useState('');
 
   useEffect(() => {
+    if (!sessionId) return;
     Promise.all([
       api.get(`/sessions/${sessionId}/detail`),
       api.get(`/payments/breakdown/${sessionId}`),

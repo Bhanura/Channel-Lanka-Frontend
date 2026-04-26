@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import DashboardShell from '@/components/layout/DashboardShell';
 import api from '@/lib/api';
 import { Building2, Save, AlertCircle } from 'lucide-react';
+import ChangePasswordForm from '@/components/auth/ChangePasswordForm';
 
 export default function CenterProfilePage() {
   const [centers, setCenters] = useState<any[]>([]);
@@ -93,6 +94,7 @@ export default function CenterProfilePage() {
             </div>
           </div>
         )}
+        <ChangePasswordForm />
       </div>
     </DashboardShell>
   );
