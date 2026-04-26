@@ -1,12 +1,12 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, Suspense } from 'react';
 import { useSearchParams } from 'next/navigation';
 import DashboardShell from '@/components/layout/DashboardShell';
 import api from '@/lib/api';
 import { useAuth } from '@/context/AuthContext';
 import { Send, Building2 } from 'lucide-react';
 
-export default function DoctorMessagesPage() {
+function DoctorMessagesContent() {
   const { user } = useAuth();
   const searchParams = useSearchParams();
   const defaultCenter = searchParams.get('center');
@@ -147,6 +147,14 @@ export default function DoctorMessagesPage() {
 
       </div>
     </DashboardShell>
+  );
+}
+
+export default function DoctorMessagesPage() {
+  return (
+    <Suspense fallback={<div>Loading messages...</div>}>
+      <DoctorMessagesContent />
+    </Suspense>
   );
 }
 
