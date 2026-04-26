@@ -11,9 +11,15 @@ export default function DoctorRequestsPage() {
   const [showSearch, setShowSearch] = useState(false);
   const [offer, setOffer] = useState('');
   const [sendingTo, setSendingTo] = useState('');
+  const [profile, setProfile] = useState<any>(null);
 
   const fetchReqs = () => api.get('/doctors/requests').then(r => setRequests(r.data.data || []));
-  useEffect(() => { fetchReqs(); }, []);
+  const fetchProfile = () => api.get('/doctors/profile').then(r => setProfile(r.data.data));
+
+  useEffect(() => { 
+    fetchReqs(); 
+    fetchProfile();
+  }, []);
 
   const searchCenters = () => {
     api.get(`/search/centers?q=${search}`).then(r => setCenters(r.data.data.centers || []));
@@ -31,10 +37,29 @@ export default function DoctorRequestsPage() {
 
   const statusColor: Record<string, string> = { pending: 'badge-warning', accepted: 'badge-success', rejected: 'badge-danger' };
 
+  const isVerified = profile?.verification_status === 'approved';
+
   return (
     <DashboardShell title="Center Requests" subtitle="Send and manage connection requests with channeling centers">
+      {!isVerified && profile && (
+        <div className="alert alert-warning" style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <XCircle size={20} />
+          <div>
+            <strong>Account Pending Verification</strong>
+            <p style={{ margin: 0, fontSize: 13, opacity: 0.9 }}>Your account must be approved by an administrator before you can send requests to centers or respond to invitations.</p>
+          </div>
+        </div>
+      )}
+
       <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 20 }}>
-        <button className="btn btn-primary btn-sm" onClick={() => setShowSearch(v => !v)}><Search size={14} /> Find & Request a Center</button>
+        <button 
+          className="btn btn-primary btn-sm" 
+          onClick={() => setShowSearch(v => !v)}
+          disabled={!isVerified}
+          title={!isVerified ? 'Verification required' : ''}
+        >
+          <Search size={14} /> Find & Request a Center
+        </button>
       </div>
 
       {showSearch && (
@@ -80,8 +105,22 @@ export default function DoctorRequestsPage() {
                   <td>
                     {r.request_status === 'pending' && r.initiated_by_role === 'center' && (
                       <div style={{ display: 'flex', gap: 6 }}>
-                        <button className="btn btn-sm" style={{ background: '#e8f5e9', color: '#2e7d32' }} onClick={() => respond(r.id, 'accepted')}><CheckCircle2 size={13} /> Accept</button>
-                        <button className="btn btn-sm" style={{ background: '#ffebee', color: '#c62828' }} onClick={() => respond(r.id, 'rejected')}><XCircle size={13} /> Reject</button>
+                        <button 
+                          className="btn btn-sm" 
+                          style={{ background: '#e8f5e9', color: '#2e7d32', opacity: isVerified ? 1 : 0.5, cursor: isVerified ? 'pointer' : 'not-allowed' }} 
+                          onClick={() => isVerified && respond(r.id, 'accepted')}
+                          disabled={!isVerified}
+                        >
+                          <CheckCircle2 size={13} /> Accept
+                        </button>
+                        <button 
+                          className="btn btn-sm" 
+                          style={{ background: '#ffebee', color: '#c62828', opacity: isVerified ? 1 : 0.5, cursor: isVerified ? 'pointer' : 'not-allowed' }} 
+                          onClick={() => isVerified && respond(r.id, 'rejected')}
+                          disabled={!isVerified}
+                        >
+                          <XCircle size={13} /> Reject
+                        </button>
                       </div>
                     )}
                   </td>

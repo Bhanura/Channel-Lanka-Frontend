@@ -6,13 +6,26 @@ import { Calendar, Building2, Users, Clock } from 'lucide-react';
 
 export default function DoctorDashboard() {
   const [stats, setStats] = useState({ todaySessions: 0, totalSessions: 0, registeredCenters: 0 });
+  const [profile, setProfile] = useState<any>(null);
 
   useEffect(() => {
     api.get('/doctors/stats').then(r => setStats(r.data.data)).catch(() => {});
+    api.get('/doctors/profile').then(r => setProfile(r.data.data)).catch(() => {});
   }, []);
 
   return (
     <DashboardShell title="Doctor Dashboard" subtitle="Your practice overview">
+      {profile && profile.verification_status !== 'approved' && (
+        <div className="alert alert-warning" style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ width: 40, height: 40, borderRadius: '50%', background: 'rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <Clock size={20} />
+          </div>
+          <div>
+            <div style={{ fontWeight: 700 }}>Verification Pending</div>
+            <div style={{ fontSize: 13, opacity: 0.9 }}>Your account is currently being reviewed by our administrators. Some features like requesting new centers will be available once you are verified.</div>
+          </div>
+        </div>
+      )}
       <div className="grid-3">
         <div className="stat-card">
           <div className="stat-icon" style={{ background: '#e3f2fd', color: '#1565c0' }}><Calendar size={22} /></div>

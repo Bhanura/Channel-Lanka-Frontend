@@ -37,6 +37,12 @@ export default function DoctorProfilePage() {
     } finally { setSaving(false); }
   };
 
+  const statusColors: Record<string, string> = { 
+    approved: 'badge-success', 
+    pending: 'badge-warning', 
+    rejected: 'badge-danger' 
+  };
+
   return (
     <DashboardShell title="My Profile" subtitle="Manage your professional information and qualifications">
       <div style={{ maxWidth: 720 }}>
@@ -48,7 +54,15 @@ export default function DoctorProfilePage() {
 
         {loading ? <div style={{ color: 'var(--text-muted)' }}>Loading profile…</div> : (
           <div className="card">
-            <div className="card-header"><div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}><User size={18} /> Professional Details</div></div>
+            <div className="card-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div style={{ fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8 }}><User size={18} /> Professional Details</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>Status:</span>
+                <span className={`badge ${statusColors[profile.verification_status] || 'badge-muted'}`} style={{ textTransform: 'capitalize' }}>
+                  {profile.verification_status || 'Pending'}
+                </span>
+              </div>
+            </div>
             <div className="card-body">
               <form onSubmit={handleSave}>
                 <div className="grid-2">
