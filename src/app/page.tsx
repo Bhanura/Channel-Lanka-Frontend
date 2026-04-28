@@ -138,7 +138,7 @@ export default function LandingPage() {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 8, color: '#fff', fontWeight: 700, fontSize: 16 }}>
           <Heart size={16} fill="#00b4d8" color="#00b4d8" /> Channel Lanka
         </div>
-        <p>© {new Date().getFullYear()} Channel Lanka. All rights reserved. · <Link href="/auth/login" style={{ color: 'var(--accent)' }}>Login</Link></p>
+        <p>© {new Date().getFullYear()} Channel Lanka. All rights reserved. </p>
       </footer>
     </div>
   );
